@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import List from './components/list'
 import Search from "./components/search";
 
@@ -22,17 +22,28 @@ const App = () => {
         },
     ];
 
-    const [searchTerm, setSearchTerm] = useState('React')
+    const [searchTerm, setSearchTerm] = useState(
+        localStorage.getItem('search') || 'React' // defining the initial state of the searchTerm
+    )
+
+    // our sideEffect function define the localstorage
+    // first parameters: useEffect set to the localstorage the most recent search ineraction
+    // second parameters: a dependency array of variables if one variables changes the function for side-effect is called
+    // Here the side effects function is called everytime the searchTerm changes
+     // so here this hook is updated whenever the component is first mounted but also if one of it dependencies is updated
+    useEffect(() => {
+        localStorage.setItem('search', searchTerm)
+    }, [searchTerm])
 
     const handleSearch = event => {
         setSearchTerm(event.target.value)
     }
     // return stories that contains the searchTerm
-    const searchedStories = stories.filter(story => story.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase() ))
+    const searchedStories = stories.filter(story => story.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
     return (
         <div>
             <h1>Hacker News Stories</h1>
-            <Search searchTerm={searchTerm} onSearch={handleSearch} />
+            <Search searchTerm={searchTerm} onSearch={handleSearch}/>
             <hr/>
             <List list={searchedStories}/>
         </div>
