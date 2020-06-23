@@ -1,18 +1,14 @@
 import React, {useState} from 'react';
 
-const Search = ({ onSearch }) => {
-    const [searchTerm, setSearchTerm] = useState('')
-    const handleChange = event => {
-        setSearchTerm(event.target.value)
-        onSearch(event)
-    }
+
+/*
+* The search component doesn't manage the state anymore but only passes up the event to te App component after text is entered in input field */
+const Search = ({onSearch, searchTerm}) => {
     return (
         <div>
             <label htmlFor="search">Search:</label>
-            <input type="text" id="search" onChange={handleChange}/>
-            <p>
-                Searching for <strong>{searchTerm}</strong>
-            </p>
+            <input type="text" id="search" onChange={onSearch}/>
+            <p>Entered text: {searchTerm}</p>
         </div>
     );
 };
