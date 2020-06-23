@@ -1,6 +1,5 @@
-### Controlled Component 
-We convert the Search component with its input fiele into a controlled component 
-We pass the searchTerm to the input field value present in the controlled component through props 
+### React Fragments 
+Normally the JSX returned by a React component needs only one wrapping top-level element.
 
-### Unidirectionnal data flow 
-UI -> side-Effect->State->UI->..
+To render multiple top-level elements side by side we have to wrap them into an array instead.
+Since we're working with a list of elements we have to give every sibling element React's key attribute 
