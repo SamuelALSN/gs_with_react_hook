@@ -3,10 +3,10 @@ import React, {useState} from 'react';
 
 /*
 * The search component doesn't manage the state anymore but only passes up the event to te App component after text is entered in input field */
-const InputWithLabel = ({id, label, value, onInputChange, type = 'text'}) => (
+const InputWithLabel = ({id, value, onInputChange, type = 'text', children}) => (
 
     <>
-        <label htmlFor={id}>{label} </label>
+        <label htmlFor={id}>{children} </label>
         &nbsp;
         <input
             id={id}
