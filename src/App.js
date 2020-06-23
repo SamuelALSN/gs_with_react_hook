@@ -26,8 +26,8 @@ const App = () => {
     // First the naming convention which puts the use prefix in front of every hook name
     //Second the returned values are returned ass aray
     const useSemiPersistentState = () => {
-        const [searchTerm, setSearchTerm] = useState(
-            localStorage.getItem('search') || '' // defining the initial state of the searchTerm
+        const [value, setValue] = useState(
+            localStorage.getItem('value') || '' // defining the initial state of the searchTerm
         )
 
         // our sideEffect function define the localstorage
@@ -36,11 +36,11 @@ const App = () => {
         // Here the side effects function is called everytime the searchTerm changes
         // so here this hook is updated whenever the component is first mounted but also if one of it dependencies is updated
         useEffect(() => {
-            localStorage.setItem('search', searchTerm)
-        }, [searchTerm])
+            localStorage.setItem('value', value)
+        }, [value])
 
         // let return the values that are needed in our App Component from  our custom hooks we created
-        return [searchTerm, setSearchTerm]
+        return [value, setValue]
     }
 
     const [searchTerm, setSearchTerm] = useSemiPersistentState()
