@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import List from './components/list'
-import Search from "./components/search";
+import InputWithLabel from "./components/inputWithLabel";
 
 const App = () => {
     const stories = [
@@ -25,7 +25,7 @@ const App = () => {
     // We are following two conventions of React's built-in hooks here
     // First the naming convention which puts the use prefix in front of every hook name
     //Second the returned values are returned ass aray
-    const useSemiPersistentState = ( key ) => {
+    const useSemiPersistentState = (key) => {
         const [value, setValue] = useState(
             localStorage.getItem(key) || '' // defining the initial state of the searchTerm
         )
@@ -37,7 +37,7 @@ const App = () => {
         // so here this hook is updated whenever the component is first mounted but also if one of it dependencies is updated
         useEffect(() => {
             localStorage.setItem(key, value)
-        }, [value,key])
+        }, [value, key])
 
         // let return the values that are needed in our App Component from  our custom hooks we created
         return [value, setValue]
@@ -52,7 +52,11 @@ const App = () => {
     return (
         <div>
             <h1>Hacker News Stories</h1>
-            <Search searchTerm={searchTerm} onSearch={handleSearch}/>
+            <InputWithLabel
+                id="search"
+                label="search"
+                value={searchTerm}
+                onInputChange={handleSearch}/>
             <hr/>
             <List list={searchedStories}/>
         </div>
