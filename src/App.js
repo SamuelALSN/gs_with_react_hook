@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import List from './components/list'
-import Search from "./components/search";
+import InputWithLabel from "./components/inputWithLabel";
 
 // We are following two conventions of React's built-in hooks here
 // First the naming convention which puts the use prefix in front of every hook name
@@ -44,6 +44,7 @@ const App = () => {
     ];
 
     const [searchTerm, setSearchTerm] = useSemiPersistentState('search', 'React')
+
     const handleSearch = event => {
         setSearchTerm(event.target.value)
     }
@@ -52,7 +53,11 @@ const App = () => {
     return (
         <div>
             <h1>Hacker News Stories</h1>
-            <Search searchTerm={searchTerm} onSearch={handleSearch}/>
+            <InputWithLabel
+                id="search"
+                label="search"
+                value={searchTerm}
+                onInputChange={handleSearch}/>
             <hr/>
             <List list={searchedStories}/>
         </div>
