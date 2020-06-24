@@ -55,6 +55,8 @@ const useSemiPersistentState = (key, initialState) => {
 const storiesReducer = (state, action) => {
     if (action.type === 'SET_STORIES') {
         return action.payload
+    } else if (action.type === 'REMOVE_STORY') { // the action gives all the necessary information an item's identifier  to remove the story from the current state and return a new list of filtered stores as state
+        return state.filter(story => action.payload.objectID !== story.objectID)
     } else {
         throw  new Error()
     }
@@ -82,16 +84,6 @@ const App = () => {
     }, [])
 
 
-    // we want to start off with an empty list of stories and simulate fetching thes stories asynchronously.
-    // In a new useEffect hook we call the function and resolve the return promise with then
-
-    // useEffect(() => {
-    //     getAsyncStories().then(result => {
-    //         setStories(result.data.stories)
-    //     }, []) // due to empty dependency array the side-effect only runs one the component renders for the first time
-    // })
-
-
     const handleSearch = event => {
         setSearchTerm(event.target.value)
     }
@@ -100,11 +92,9 @@ const App = () => {
 
     // remove a specific story given as argument (item) from the list
     const handleRemoveStory = item => {
-        const newStories = stories.filter(story => item.objectID !== story.objectID)
-
         dispatchStories({
-            type: 'SET_STORIES',
-            payload: newStories,
+            type: 'REMOVE_STORY',
+            payload: item,
         })
     }
 
