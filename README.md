@@ -1,5 +1,7 @@
-### reusable component
+### NON - INLINE HANDLER IN JSX 
 
-Have a closer look at the Search component. The label element has the text "Search: "; the id/htmlFor attributes have the search identifier; the value is called search; and the callback handler is called onSearch. The component is very much tied to the search feature, which makes it less reusable for the rest of the application and non search-related tasks. It also risks introducing bugs if two of these Search components are rendered side by side, because the htmlFor/id combination is duplicated, breaking the focus when one of the labels is clicked by the user.
+Here we are making our datasources which is stateless before statefull by adding to our State with UseEffect  
+Here we applied props , handlers , callback handlers and state 
 
-Since the Search component doesn’t have any actual “search” functionality, it takes little effort to generalize other search domain properties to make the component reusable for the rest of the application. Let’s pass an additional id and label prop to the Search component, rename the actual value and callback handler to something more abstract, and rename the component accordingly:
+### INLINE-HANDLERS 
+All three handler versions, two of which are inline and the normal handler, are acceptable. The non-inlined handler moves the implementation details into the function component’s block body; the inline handler move the implementation details into the JSX.
