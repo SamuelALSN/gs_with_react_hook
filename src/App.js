@@ -53,12 +53,21 @@ const useSemiPersistentState = (key, initialState) => {
 
 // a reducer function always receives state and action , a reducer always return a new state
 const storiesReducer = (state, action) => {
-    if (action.type === 'SET_STORIES') {
-        return action.payload
-    } else if (action.type === 'REMOVE_STORY') { // the action gives all the necessary information an item's identifier  to remove the story from the current state and return a new list of filtered stores as state
-        return state.filter(story => action.payload.objectID !== story.objectID)
-    } else {
-        throw  new Error()
+    // if (action.type === 'SET_STORIES') {
+    //     return action.payload
+    // } else if (action.type === 'REMOVE_STORY') { // the action gives all the necessary information an item's identifier  to remove the story from the current state and return a new list of filtered stores as state
+    //     return state.filter(story => action.payload.objectID !== story.objectID)
+    // } else {
+    //     throw  new Error()
+    // }
+
+    switch (action.type) {
+        case 'SET_STORIES':
+            return action.payload;
+        case 'REMOVE_STORY':
+            return state.filter(story => action.payload.objectID !== story.objectID)
+        default:
+            throw  new Error()
     }
 }
 
