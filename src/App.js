@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import List from './components/list';
 import InputWithLabel from "./components/inputWithLabel";
 
-const initrialStories = [
+const initialStories = [
     {
         title: 'React',
         url: 'https://reactjs.org/',
@@ -20,6 +20,15 @@ const initrialStories = [
         objectID: 1,
     },
 ];
+
+const getAsyncStories = () =>
+    new Promise(resolve =>
+        setTimeout(
+            () => resolve({data: {stories: initialStories}}),
+            2000
+        )
+    );
+
 
 
 // We are following two conventions of React's built-in hooks here
@@ -47,7 +56,16 @@ const useSemiPersistentState = (key, initialState) => {
 const App = () => {
 
     const [searchTerm, setSearchTerm] = useSemiPersistentState('search', 'React')
-    const [stories, setStories] = useState(initrialStories)
+    const [stories, setStories] = useState([])
+
+    // we want to start off with an empty list of stories and simulate fetching thes stories asynchronously.
+    // In a new useEffect hook we call the function and resolve the return promise with then
+
+    useEffect(() => {
+        getAsyncStories().then(result => {
+            setStories(result.data.stories)
+        }, []) // due to empty dependency array the side-effect only runs one the component renders for the first time
+    })
     const handleSearch = event => {
         setSearchTerm(event.target.value)
     }
