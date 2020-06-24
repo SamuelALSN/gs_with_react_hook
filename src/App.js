@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import List from './components/list';
 import InputWithLabel from "./components/inputWithLabel";
 
@@ -51,11 +51,19 @@ const useSemiPersistentState = (key, initialState) => {
     return [value, setValue]
 }
 
+// a reducer function always receives state and action , a reducer always return a new state
+const storiesReducer = (state, action) => {
+    if (action.type === 'SET_STORIES') {
+        return action.payload
+    } else {
+        throw  new Error()
+    }
+}
 
 const App = () => {
 
     const [searchTerm, setSearchTerm] = useSemiPersistentState('search', 'React')
-    const [stories, setStories] = useState([])
+    const [stories, dispatchStories] = useReducer(storiesReducer, [])
 
     const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState(false)
@@ -63,7 +71,11 @@ const App = () => {
         setIsLoading(true)
         getAsyncStories()
             .then(result => {
-                setStories(result.data.stories);
+                dispatchStories({ // Instaed of setting state explicitly with the state updater function from useState , the useReducer state updater function dispatches an action for the reducer
+                    // the action comes with type and payload
+                    type: 'SET_STORIES',
+                    payload: result.data.stories,
+                });
                 setIsLoading(false)
             })
             .catch(() => setIsError(true))
@@ -90,7 +102,10 @@ const App = () => {
     const handleRemoveStory = item => {
         const newStories = stories.filter(story => item.objectID !== story.objectID)
 
-        setStories(newStories) // updating our state
+        dispatchStories({
+            type: 'SET_STORIES',
+            payload: newStories,
+        })
     }
 
     return (
