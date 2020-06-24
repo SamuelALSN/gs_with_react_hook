@@ -1,0 +1,47 @@
+[33mcommit 0dfa1280207c8facaa0aefcda2a07a37476785c8[m[33m ([m[1;36mHEAD -> [m[1;32mreact-custom-hooks[m[33m, [m[1;32mreact-fragments[m[33m)[m
+Author: SamuelALSN <samuelgwfirst@gmail.com>
+Date:   Tue Jun 23 18:05:27 2020 +0000
+
+     Using <<useSemiPersistentState>> more than once in React leads to an overwrite of the value-allocated item in the local storage so tho fix this we pass a key so we change where there is 'value' before by Key
+
+[33mcommit 49cfcdedd89fea955788f912bc444ebec861a2dd[m
+Author: SamuelALSN <samuelgwfirst@gmail.com>
+Date:   Tue Jun 23 17:35:36 2020 +0000
+
+    Implementing Reusiabiltiy for <<useSemiPersistentState>> hook for a value that's set in state and synchronized in local storage.
+
+[33mcommit c26143357cb423cce7fe4a9879f35b064339b07b[m
+Author: SamuelALSN <samuelgwfirst@gmail.com>
+Date:   Tue Jun 23 17:27:00 2020 +0000
+
+    Implementing of our custom hooks use React built'in custom hooks 2 conventions
+
+[33mcommit 16d06cb6555352ab6fd88617beafd5090ff76956[m[33m ([m[1;32mreact-side-effects[m[33m)[m
+Author: SamuelALSN <samuelgwfirst@gmail.com>
+Date:   Tue Jun 23 17:19:08 2020 +0000
+
+    Implementing side effect with localstorage using Dom API
+
+[33mcommit ff6f1b206a38aa611e32672c4c7455999883a2ba[m[33m ([m[1;32mreact-controlled-component[m[33m)[m
+Author: SamuelALSN <samuelgwfirst@gmail.com>
+Date:   Tue Jun 23 15:29:12 2020 +0000
+
+    Controlled component and discovering of Unidirectionnal data-flow
+
+[33mcommit e730e51acea8538c4eb7d90c19896c0fdf5ab20a[m[33m ([m[1;32mreact-lifting-state[m[33m)[m
+Author: SamuelALSN <samuelgwfirst@gmail.com>
+Date:   Tue Jun 23 15:05:57 2020 +0000
+
+    lifting state in react so child component can have acess to it
+
+[33mcommit 6eeabbc811fd8115b8fb0ab7556242dbff61ea84[m[33m ([m[1;32mreact-callback-handler[m[33m)[m
+Author: SamuelALSN <samuelgwfirst@gmail.com>
+Date:   Tue Jun 23 13:36:51 2020 +0000
+
+    Initial commit
+
+[33mcommit 1a7ddfedc077a715b329d870e4386382aedd2eca[m[33m ([m[1;32mmaster[m[33m)[m
+Author: SamuelALSN <samuelgwfirst@gmail.com>
+Date:   Tue Jun 23 12:02:01 2020 +0000
+
+    Initialize project using Create React App
