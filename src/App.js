@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import List from './components/list';
 import InputWithLabel from "./components/inputWithLabel";
 
-const initrialStories = [
+const initialStories = [
     {
         title: 'React',
         url: 'https://reactjs.org/',
@@ -47,7 +47,7 @@ const useSemiPersistentState = (key, initialState) => {
 const App = () => {
 
     const [searchTerm, setSearchTerm] = useSemiPersistentState('search', 'React')
-    const [stories, setStories] = useState(initrialStories)
+    const [stories, setStories] = useState(initialStories)
     const handleSearch = event => {
         setSearchTerm(event.target.value)
     }
