@@ -10,7 +10,7 @@ const Item = ({item, onRemoveItem}) => {
             <span>{item.author}</span>
             <span>{item.points}</span>
             <span>
-                <button type="button" onClick={handleRemoveItem}>
+                <button type="button" onClick={onRemoveItem.bind(null,item)}>
                     Dismiss
                 </button>
             </span>
