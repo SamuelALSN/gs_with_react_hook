@@ -1,6 +1,26 @@
 import React, {useEffect, useState} from 'react';
-import List from './components/list'
+import List from './components/list';
 import InputWithLabel from "./components/inputWithLabel";
+
+const initrialStories = [
+    {
+        title: 'React',
+        url: 'https://reactjs.org/',
+        author: 'Jordan Walke',
+        num_comments: 3,
+        points: 4,
+        objectID: 0,
+    },
+    {
+        title: 'Redux',
+        url: 'https://redux.js.org/',
+        author: 'Dan Abramov, Andrew Clark',
+        num_comments: 2,
+        points: 5,
+        objectID: 1,
+    },
+];
+
 
 // We are following two conventions of React's built-in hooks here
 // First the naming convention which puts the use prefix in front of every hook name
@@ -25,32 +45,22 @@ const useSemiPersistentState = (key, initialState) => {
 
 
 const App = () => {
-    const stories = [
-        {
-            title: 'React',
-            url: 'https://reactjs.org/',
-            author: 'Jordan Walke',
-            num_comments: 3,
-            points: 4,
-            objectID: 0,
-        },
-        {
-            title: 'Redux',
-            url: 'https://redux.js.org/',
-            author: 'Dan Abramov, Andrew Clark',
-            num_comments: 2,
-            points: 5,
-            objectID: 1,
-        },
-    ];
 
-
-    const [searchTerm, setSearchTerm] = useSemiPersistentState('search','React')
+    const [searchTerm, setSearchTerm] = useSemiPersistentState('search', 'React')
+    const [stories, setStories] = useState(initrialStories)
     const handleSearch = event => {
         setSearchTerm(event.target.value)
     }
     // return stories that contains the searchTerm
     const searchedStories = stories.filter(story => story.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
+
+    // remove a specific story given as argument (item) from the list
+    const handleRemoveStory = item => {
+        const newStories = stories.filter(story => item.objectID !== story.objectID)
+
+        setStories(newStories) // updating our state
+    }
+
     return (
         <div>
             <h1>Hacker News Stories</h1>
@@ -63,7 +73,7 @@ const App = () => {
 
             </InputWithLabel>
             <hr/>
-            <List list={searchedStories}/>
+            <List list={searchedStories} onRemoveItem={handleRemoveStory}/>
         </div>
     );
 };
