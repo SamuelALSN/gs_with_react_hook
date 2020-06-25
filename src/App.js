@@ -33,7 +33,6 @@ const getAsyncStories = () =>
     new Promise((resolve, reject) => setTimeout(reject, 2000));
 
 
-
 // We are following two conventions of React's built-in hooks here
 // First the naming convention which puts the use prefix in front of every hook name
 //Second the returned values are returned ass array
@@ -58,10 +57,32 @@ const useSemiPersistentState = (key, initialState) => {
 // a reducer function always receives state and action , a reducer always return a new state
 const storiesReducer = (state, action) => {
     switch (action.type) {
-        case 'SET_STORIES':
-            return action.payload;
+        case 'STORIES_FETCH_INIT':
+            return {
+                ...state,
+                isLoading: true,
+                isError: false,
+            }
+        case 'STORIES_FETCH_SUCCESS':
+            return {
+                ...state,
+                isLoading: false,
+                isError: false,
+                data: action.payload,
+            }
+        case 'STORIES_FETCH_FAILURE':
+            return { // returning a new state
+                ...state,
+                isLoading: false,
+                isError: true,
+            }
+            // NOTICE how the REMOVE_STORY action changed as well , it operates on the state.data, no longer just the plain state
+            // so now the state is a complex object with data, loading and error states rather than just a list of stories
         case 'REMOVE_STORY':
-            return state.filter(story => action.payload.objectID !== story.objectID)
+            return {
+                ...state,
+                data: state.data.filter(story => action.payload.objectID !== story.objectID)
+            }
         default:
             throw  new Error()
     }
@@ -70,22 +91,31 @@ const storiesReducer = (state, action) => {
 const App = () => {
 
     const [searchTerm, setSearchTerm] = useSemiPersistentState('search', 'React')
-    const [stories, dispatchStories] = useReducer(storiesReducer, [])
 
-    const [isLoading, setIsLoading] = useState(false)
-    const [isError, setIsError] = useState(false)
+    // we merge isLoading and isError into one Reducer hook for a unified state management and a more complex state object | see the line below
+    // so that everything related to asynchronous data fetching must use the new dispatch function for state transitions see line 83.+ for usage
+    const [stories, dispatchStories] = useReducer(
+        storiesReducer,
+        {data: [], isLoading: false, isError: false}
+    )
+
+    // const [isLoading, setIsLoading] = useState(false)
+    // const [isError, setIsError] = useState(false)
     useEffect(() => {
-        setIsLoading(true)
+        //setIsLoading(true)
+        dispatchStories({type: 'STORIES_FETCH_INIT'})
         getAsyncStories()
             .then(result => {
-                dispatchStories({ // Instaed of setting state explicitly with the state updater function from useState , the useReducer state updater function dispatches an action for the reducer
+                dispatchStories({ // Instead of setting state explicitly with the state updater function from useState , the useReducer state updater function dispatches an action for the reducer
                     // the action comes with type and payload
-                    type: 'SET_STORIES',
+                    type: 'STORIES_FETCH_SUCCESS',
                     payload: result.data.stories,
                 });
-                setIsLoading(false)
+                // setIsLoading(false)
             })
-            .catch(() => setIsError(true))
+            .catch(() => dispatchStories({type: 'STORIES_FETCH_FAILURE'})
+                // setIsError(true)
+            )
     }, [])
 
 
@@ -93,7 +123,7 @@ const App = () => {
         setSearchTerm(event.target.value)
     }
     // return stories that contains the searchTerm
-    const searchedStories = stories.filter(story => story.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
+    const searchedStories = stories.data.filter(story => story.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
 
     // remove a specific story given as argument (item) from the list
     const handleRemoveStory = item => {
@@ -115,8 +145,8 @@ const App = () => {
 
             </InputWithLabel>
             <hr/>
-            {isError && <p> Something went wrong ....</p>}
-            {isLoading ? (
+            {stories.isError && <p> Something went wrong ....</p>}
+            {stories.isLoading ? (
                 <p> Loading .... </p>
             ) : (
                 <List
