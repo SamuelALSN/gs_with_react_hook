@@ -104,7 +104,7 @@ const App = () => {
     // const [isLoading, setIsLoading] = useState(false)
     // const [isError, setIsError] = useState(false)
     useEffect(() => {
-        if(searchTerm === '') return;
+        if (!searchTerm) return; // if not searchTerm do Nothing
         //setIsLoading(true)
         dispatchStories({type: 'STORIES_FETCH_INIT'})
         fetch(`${API_ENDPOINT}${searchTerm}`)
@@ -120,14 +120,14 @@ const App = () => {
             .catch(() => dispatchStories({type: 'STORIES_FETCH_FAILURE'})
                 // setIsError(true)
             )
-    }, [])
+    }, [searchTerm])
 
 
     const handleSearch = event => {
         setSearchTerm(event.target.value)
     }
     // return stories that contains the searchTerm
-   //const searchedStories = stories.data.filter(story => story.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
+    //const searchedStories = stories.data.filter(story => story.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
 
     // remove a specific story given as argument (item) from the list
     const handleRemoveStory = item => {
