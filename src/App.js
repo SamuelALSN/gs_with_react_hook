@@ -29,9 +29,9 @@ const initialStories = [
 //         )
 //     );
 
-const getAsyncStories = () =>
-    new Promise((resolve, reject) => setTimeout(reject, 2000));
-
+// const getAsyncStories = () =>
+//     new Promise((resolve, reject) => setTimeout(reject, 2000));
+//
 
 // We are following two conventions of React's built-in hooks here
 // First the naming convention which puts the use prefix in front of every hook name
@@ -76,8 +76,8 @@ const storiesReducer = (state, action) => {
                 isLoading: false,
                 isError: true,
             }
-            // NOTICE how the REMOVE_STORY action changed as well , it operates on the state.data, no longer just the plain state
-            // so now the state is a complex object with data, loading and error states rather than just a list of stories
+        // NOTICE how the REMOVE_STORY action changed as well , it operates on the state.data, no longer just the plain state
+        // so now the state is a complex object with data, loading and error states rather than just a list of stories
         case 'REMOVE_STORY':
             return {
                 ...state,
@@ -87,6 +87,8 @@ const storiesReducer = (state, action) => {
             throw  new Error()
     }
 }
+
+const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
 const App = () => {
 
@@ -104,12 +106,13 @@ const App = () => {
     useEffect(() => {
         //setIsLoading(true)
         dispatchStories({type: 'STORIES_FETCH_INIT'})
-        getAsyncStories()
+        fetch(`${API_ENDPOINT}react`)
+            .then(response => response.json())
             .then(result => {
                 dispatchStories({ // Instead of setting state explicitly with the state updater function from useState , the useReducer state updater function dispatches an action for the reducer
                     // the action comes with type and payload
                     type: 'STORIES_FETCH_SUCCESS',
-                    payload: result.data.stories,
+                    payload: result.hits,
                 });
                 // setIsLoading(false)
             })
@@ -123,7 +126,7 @@ const App = () => {
         setSearchTerm(event.target.value)
     }
     // return stories that contains the searchTerm
-    const searchedStories = stories.data.filter(story => story.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
+   const searchedStories = stories.data.filter(story => story.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
 
     // remove a specific story given as argument (item) from the list
     const handleRemoveStory = item => {
