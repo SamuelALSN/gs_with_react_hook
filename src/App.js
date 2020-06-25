@@ -2,24 +2,24 @@ import React, {useEffect, useReducer, useState} from 'react';
 import List from './components/list';
 import InputWithLabel from "./components/inputWithLabel";
 
-const initialStories = [
-    {
-        title: 'React',
-        url: 'https://reactjs.org/',
-        author: 'Jordan Walke',
-        num_comments: 3,
-        points: 4,
-        objectID: 0,
-    },
-    {
-        title: 'Redux',
-        url: 'https://redux.js.org/',
-        author: 'Dan Abramov, Andrew Clark',
-        num_comments: 2,
-        points: 5,
-        objectID: 1,
-    },
-];
+// const initialStories = [
+//     {
+//         title: 'React',
+//         url: 'https://reactjs.org/',
+//         author: 'Jordan Walke',
+//         num_comments: 3,
+//         points: 4,
+//         objectID: 0,
+//     },
+//     {
+//         title: 'Redux',
+//         url: 'https://redux.js.org/',
+//         author: 'Dan Abramov, Andrew Clark',
+//         num_comments: 2,
+//         points: 5,
+//         objectID: 1,
+//     },
+// ];
 
 // const getAsyncStories = () =>
 //     new Promise(resolve =>
@@ -104,9 +104,10 @@ const App = () => {
     // const [isLoading, setIsLoading] = useState(false)
     // const [isError, setIsError] = useState(false)
     useEffect(() => {
+        if(searchTerm === '') return;
         //setIsLoading(true)
         dispatchStories({type: 'STORIES_FETCH_INIT'})
-        fetch(`${API_ENDPOINT}react`)
+        fetch(`${API_ENDPOINT}${searchTerm}`)
             .then(response => response.json())
             .then(result => {
                 dispatchStories({ // Instead of setting state explicitly with the state updater function from useState , the useReducer state updater function dispatches an action for the reducer
@@ -126,7 +127,7 @@ const App = () => {
         setSearchTerm(event.target.value)
     }
     // return stories that contains the searchTerm
-   const searchedStories = stories.data.filter(story => story.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
+   //const searchedStories = stories.data.filter(story => story.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
 
     // remove a specific story given as argument (item) from the list
     const handleRemoveStory = item => {
@@ -153,7 +154,7 @@ const App = () => {
                 <p> Loading .... </p>
             ) : (
                 <List
-                    list={searchedStories}
+                    list={stories.data}
                     onRemoveItem={handleRemoveStory}
                 />
             )}
