@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useState} from 'react';
+import React, {useCallback, useEffect, useReducer, useState} from 'react';
 import List from './components/list';
 import InputWithLabel from "./components/inputWithLabel";
 
@@ -101,11 +101,8 @@ const App = () => {
         {data: [], isLoading: false, isError: false}
     )
 
-    // const [isLoading, setIsLoading] = useState(false)
-    // const [isError, setIsError] = useState(false)
-    useEffect(() => {
+    const handleFetchStories = useCallback(() => {
         if (!searchTerm) return; // if not searchTerm do Nothing
-        //setIsLoading(true)
         dispatchStories({type: 'STORIES_FETCH_INIT'})
         fetch(`${API_ENDPOINT}${searchTerm}`)
             .then(response => response.json())
@@ -115,20 +112,18 @@ const App = () => {
                     type: 'STORIES_FETCH_SUCCESS',
                     payload: result.hits,
                 });
-                // setIsLoading(false)
             })
-            .catch(() => dispatchStories({type: 'STORIES_FETCH_FAILURE'})
-                // setIsError(true)
-            )
-    }, [searchTerm])
+            .catch(() => dispatchStories({type: 'STORIES_FETCH_FAILURE'}))
+    }, [searchTerm])//E
+
+    useEffect(() => {
+        handleFetchStories() // C
+    }, [handleFetchStories])
 
 
     const handleSearch = event => {
         setSearchTerm(event.target.value)
     }
-    // return stories that contains the searchTerm
-    //const searchedStories = stories.data.filter(story => story.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
-
     // remove a specific story given as argument (item) from the list
     const handleRemoveStory = item => {
         dispatchStories({

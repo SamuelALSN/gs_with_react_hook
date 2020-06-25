@@ -1,10 +1,4 @@
-### DATA FETCHING WITH REACT 
-***
-irst, the API_ENDPOINT ,(A) is used to fetch popular tech stories for a certain query (a search topic). In this case, we fetch stories about React (B). Second, the native browser’s fetch API is used to make this request (B). For the fetch API, the response needs to be translated into JSON (C). Finally, the returned result follows a different data structure (D), which we send as payload to our component’s state.
+### Memoized handler in React 
 
-***
-We changed the feature from a client-side to server-side search, Instead of 
-filtering a predefined list of stories on the client , the searchTerm is used 
-to fetch a sever-side filtering list .
-The server-side search happens not only for the initial data fetching but also for dat fetching if the searchTerm changes changes.
-The feature is full server-side now 
+We have learned about handlers, callback handlers, and inline handlers. Now we’ll introduce a memoized handler, which can be applied on top of handlers and callback handlers. For the sake of learning, we will move all the data fetching logic into a standalone function outside the side-effect (A); wrap it into a useCallback hook (B); and then invoke it in the useEffect hook (C):
+****
