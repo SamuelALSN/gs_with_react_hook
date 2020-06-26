@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useReducer, useState} from 'react';
 import List from './components/list';
 import InputWithLabel from "./components/inputWithLabel";
 import axios from 'axios';
+import SearchForm from "./components/searchForm";
 
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
@@ -95,6 +96,8 @@ const App = () => {
     // explicit-datafetching__2: set the url explicitly  when submit search button is clicked
     const handleSearchSubmit = () => {
         setUrl(`${API_ENDPOINT}${searchTerm}`)
+        // eslint-disable-next-line no-restricted-globals
+        event.preventDefault();
     }
 
     // remove a specific story given as argument (item) from the list
@@ -108,24 +111,10 @@ const App = () => {
     return (
         <div>
             <h1>Hacker News Stories</h1>
-            <InputWithLabel
-                id="search"
-                value={searchTerm}
-                isFocused
-                onInputChange={handleSearchInput}>
-                <strong> Search :</strong>
-
-            </InputWithLabel>
-
-
-            {/* Disabled when we the searchterm is empty or isn't defined */}
-            <button
-                type="button"
-                disabled={!searchTerm}
-                onClick={handleSearchSubmit}
-            >
-                Submit
-            </button>
+            <SearchForm
+                searchTerm={searchTerm}
+                onSearchInput={handleSearchInput}
+                onSearchSubmit={handleSearchSubmit}/>
             <hr/>
             {stories.isError && <p> Something went wrong ....</p>}
             {stories.isLoading ? (
