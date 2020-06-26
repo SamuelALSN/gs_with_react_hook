@@ -2,36 +2,8 @@ import React, {useCallback, useEffect, useReducer, useState} from 'react';
 import List from './components/list';
 import InputWithLabel from "./components/inputWithLabel";
 
-// const initialStories = [
-//     {
-//         title: 'React',
-//         url: 'https://reactjs.org/',
-//         author: 'Jordan Walke',
-//         num_comments: 3,
-//         points: 4,
-//         objectID: 0,
-//     },
-//     {
-//         title: 'Redux',
-//         url: 'https://redux.js.org/',
-//         author: 'Dan Abramov, Andrew Clark',
-//         num_comments: 2,
-//         points: 5,
-//         objectID: 1,
-//     },
-// ];
 
-// const getAsyncStories = () =>
-//     new Promise(resolve =>
-//         setTimeout(
-//             () => resolve({data: {stories: initialStories}}),
-//             2000
-//         )
-//     );
-
-// const getAsyncStories = () =>
-//     new Promise((resolve, reject) => setTimeout(reject, 2000));
-//
+const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
 // We are following two conventions of React's built-in hooks here
 // First the naming convention which puts the use prefix in front of every hook name
@@ -40,17 +12,10 @@ const useSemiPersistentState = (key, initialState) => {
     const [value, setValue] = useState(
         localStorage.getItem(key) || initialState // defining the initial state of the searchTerm
     )
-
-    // our sideEffect function define the localstorage
-    // first parameters: useEffect set to the localstorage the most recent search ineraction
-    // second parameters: a dependency array of variables if one variables changes the function for side-effect is called
-    // Here the side effects function is called everytime the searchTerm changes
-    // so here this hook is updated whenever the component is first mounted but also if one of it dependencies is updated
     useEffect(() => {
         localStorage.setItem(key, value)
     }, [value, key])
 
-    // let return the values that are needed in our App Component from  our custom hooks we created
     return [value, setValue]
 }
 
@@ -76,9 +41,7 @@ const storiesReducer = (state, action) => {
                 isLoading: false,
                 isError: true,
             }
-        // NOTICE how the REMOVE_STORY action changed as well , it operates on the state.data, no longer just the plain state
-        // so now the state is a complex object with data, loading and error states rather than just a list of stories
-        case 'REMOVE_STORY':
+            case 'REMOVE_STORY':
             return {
                 ...state,
                 data: state.data.filter(story => action.payload.objectID !== story.objectID)
@@ -88,7 +51,6 @@ const storiesReducer = (state, action) => {
     }
 }
 
-const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
 const App = () => {
 
@@ -101,6 +63,7 @@ const App = () => {
         {data: [], isLoading: false, isError: false}
     )
 
+    // A
     const handleFetchStories = useCallback(() => {
         if (!searchTerm) return; // if not searchTerm do Nothing
         dispatchStories({type: 'STORIES_FETCH_INIT'})
@@ -118,7 +81,7 @@ const App = () => {
 
     useEffect(() => {
         handleFetchStories() // C
-    }, [handleFetchStories])
+    }, [handleFetchStories]) //D
 
 
     const handleSearch = event => {
