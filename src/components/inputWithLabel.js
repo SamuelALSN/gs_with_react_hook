@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-
+import React, {useEffect} from 'react';
+import styles from '../App.module.css'
 
 /*
 * The search component doesn't manage the state anymore but only passes up the event to te App component after text is entered in input field */
@@ -17,7 +17,7 @@ const InputWithLabel = ({id, value, onInputChange, type = 'text', children, isFo
     }, [isFocused])
     return (
         <>
-            <label htmlFor={id} className="label">
+            <label htmlFor={id} className={styles.label}>
                 {children}
             </label>
             &nbsp;
@@ -30,7 +30,7 @@ const InputWithLabel = ({id, value, onInputChange, type = 'text', children, isFo
                 value={value}
                 // autoFocus={isFocused}
                 onChange={onInputChange}
-                className="input"
+                className={styles.input}
             />
         </>
     )

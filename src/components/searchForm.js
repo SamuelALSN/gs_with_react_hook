@@ -1,9 +1,10 @@
 import React from 'react';
+import  styles from '../App.module.css'
 import InputWithLabel from "./inputWithLabel";
 
 const SearchForm = ({searchTerm,onSearchInput,onSearchSubmit}) => {
     return (
-        <form onSubmit={onSearchSubmit} className="search-form">
+        <form onSubmit={onSearchSubmit} className={styles.searchForm}>
             <InputWithLabel
                 id="search"
                 value={searchTerm}
