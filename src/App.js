@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useReducer, useState} from 'react';
 import List from './components/list';
 import InputWithLabel from "./components/inputWithLabel";
-
+import axios from 'axios';
 
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
@@ -67,11 +67,11 @@ const App = () => {
 
     // A
     const handleFetchStories = useCallback(() => {
-       // if (!searchTerm) return; // if not searchTerm do Nothing
+        // if (!searchTerm) return; // if not searchTerm do Nothing
         dispatchStories({type: 'STORIES_FETCH_INIT'})
 
-        fetch(url)
-            .then(response => response.json())
+        axios.get(url)
+            //.then(response => response.json())
             .then(result => {
                 dispatchStories({ // Instead of setting state explicitly with the state updater function from useState , the useReducer state updater function dispatches an action for the reducer
                     // the action comes with type and payload
