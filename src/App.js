@@ -41,7 +41,7 @@ const storiesReducer = (state, action) => {
                 isLoading: false,
                 isError: true,
             }
-            case 'REMOVE_STORY':
+        case 'REMOVE_STORY':
             return {
                 ...state,
                 data: state.data.filter(story => action.payload.objectID !== story.objectID)
@@ -56,6 +56,8 @@ const App = () => {
 
     const [searchTerm, setSearchTerm] = useSemiPersistentState('search', 'React')
 
+    // explicit-datafetching: __1
+    const [url, setUrl] = useState(`${API_ENDPOINT}${searchTerm}`)
     // we merge isLoading and isError into one Reducer hook for a unified state management and a more complex state object | see the line below
     // so that everything related to asynchronous data fetching must use the new dispatch function for state transitions see line 83.+ for usage
     const [stories, dispatchStories] = useReducer(
@@ -65,9 +67,10 @@ const App = () => {
 
     // A
     const handleFetchStories = useCallback(() => {
-        if (!searchTerm) return; // if not searchTerm do Nothing
+       // if (!searchTerm) return; // if not searchTerm do Nothing
         dispatchStories({type: 'STORIES_FETCH_INIT'})
-        fetch(`${API_ENDPOINT}${searchTerm}`)
+
+        fetch(url)
             .then(response => response.json())
             .then(result => {
                 dispatchStories({ // Instead of setting state explicitly with the state updater function from useState , the useReducer state updater function dispatches an action for the reducer
@@ -77,16 +80,21 @@ const App = () => {
                 });
             })
             .catch(() => dispatchStories({type: 'STORIES_FETCH_FAILURE'}))
-    }, [searchTerm])//E
+    }, [url])//E
 
     useEffect(() => {
         handleFetchStories() // C
     }, [handleFetchStories]) //D
 
 
-    const handleSearch = event => {
+    const handleSearchInput = event => {
         setSearchTerm(event.target.value)
     }
+    // explicit-datafetching__2: set the url explicitly  when submit search button is clicked
+    const handleSearchSubmit = () => {
+        setUrl(`${API_ENDPOINT}${searchTerm}`)
+    }
+
     // remove a specific story given as argument (item) from the list
     const handleRemoveStory = item => {
         dispatchStories({
@@ -102,10 +110,20 @@ const App = () => {
                 id="search"
                 value={searchTerm}
                 isFocused
-                onInputChange={handleSearch}>
+                onInputChange={handleSearchInput}>
                 <strong> Search :</strong>
 
             </InputWithLabel>
+
+
+            {/* Disabled when we the searchterm is empty or isn't defined */}
+            <button
+                type="button"
+                disabled={!searchTerm}
+                onClick={handleSearchSubmit}
+            >
+                Submit
+            </button>
             <hr/>
             {stories.isError && <p> Something went wrong ....</p>}
             {stories.isLoading ? (

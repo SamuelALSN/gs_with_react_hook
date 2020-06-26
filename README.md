@@ -1,15 +1,24 @@
-### Memoized handler in React 
+### Explicit data Fetching with React
 
-We have learned about handlers, callback handlers, and inline handlers. Now we’ll introduce a memoized handler, which can be applied on top of handlers and callback handlers. For the sake of learning, we will move all the data fetching logic into a standalone function outside the side-effect (A); wrap it into a useCallback hook (B); and then invoke it in the useEffect hook (C):
+Re-fetching all data each time someone types in the input field isn't optimal
+Since we're using a third-party API to fetch the dta, its inernal are out of our reach.
+Eventually we will incur rate limiting which retures an error instead of data
 
-****
-Instead of using the data fetching logic anonymously in a side-effect,
-we made it available as a function for the application 
-
-Explanation:
-If we didn’t create a memoized function with React’s useCallback Hook, a new handleFetchStories function would be created with each App component is rendered. The handleFetchStories function would be created each time, and would be executed in the useEffect hook to fetch data. The fetched data is then stored as state in the component. Because the state of the component changed, the component re-renders and creates a new handleFetchStories function. The side-effect would be triggered to fetch data, and we’d be stuck in an endless loop:
-
-The useCallback hook changes the function only when the search term changes. That’s when we want to trigger a re-fetch of the data, because the input field has new input and we want to see the new data displayed in our list.
-
-By moving the data fetching function outside the useEffect hook, it becomes reusable for other parts of the application. We won’t use it just yet, but it is a way to understand the useCallback hook. Now the useEffect hook runs implicitly when the searchTerm changes, because the handleFetchStories is re-defined each time the searchTerm changes. Since the useEffect hook depends on the handleFetchStories, the side-effect for data fetching runs again.
-
+1- To solve this problem we will change the implementation details from implicit to explicit data (re-)fetching.
+In other words , the application will refetch data only if someone clicks a confirmation button.
+First we will add a button element for the confirmation to the JSX
+ 
+ 2-  Second the handler, input and button handler receive implementation logic 
+ to update the component's state.
+ The input field handler still updates the searchTerm 
+ the button handler sets the url derived from the current searchTerm and the static API URL as a new state 
+  
+  3- Third instead of running the data fetching side-effect on every searchTerm change 
+  which would happen each time the input field's value changes  - the url is used
+  The url is set explicitly by the user when the search is confirmed via our new button  
+  
+  Notice that before the searchTerm was used for two cases : 
+  updating field's state and activating the side-effect for fetching data 
+  So it haves too many responsabilities ,
+  Now it's only used for the former. A second state called url got introduced for triggering the side effect for fetching data 
+  which only happes when a user clicks the confirmation button 
