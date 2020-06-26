@@ -66,20 +66,22 @@ const App = () => {
     )
 
     // A
-    const handleFetchStories = useCallback(() => {
+    const handleFetchStories = useCallback(async () => {
         // if (!searchTerm) return; // if not searchTerm do Nothing
         dispatchStories({type: 'STORIES_FETCH_INIT'})
 
-        axios.get(url)
-            //.then(response => response.json())
-            .then(result => {
-                dispatchStories({ // Instead of setting state explicitly with the state updater function from useState , the useReducer state updater function dispatches an action for the reducer
-                    // the action comes with type and payload
-                    type: 'STORIES_FETCH_SUCCESS',
-                    payload: result.hits,
-                });
-            })
-            .catch(() => dispatchStories({type: 'STORIES_FETCH_FAILURE'}))
+        try {
+            // once we start using the await keyword , everything reads like synchronous code
+            // actions after await keyword are not executed until promise resolves meaning the code will wait
+            const result = await axios.get(url)
+            dispatchStories({ // Instead of setting state explicitly with the state updater function from useState , the useReducer state updater function dispatches an action for the reducer
+                // the action comes with type and payload
+                type: 'STORIES_FETCH_SUCCESS',
+                payload: result.data.hits,
+            });
+        } catch {
+            dispatchStories({type: 'STORIES_FETCH_FAILURE'})
+        }
     }, [url])//E
 
     useEffect(() => {
