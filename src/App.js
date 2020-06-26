@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useReducer, useState} from 'react';
-import List from './components/list';
-import InputWithLabel from "./components/inputWithLabel";
 import axios from 'axios';
+import './App.css'
+import List from './components/list';
 import SearchForm from "./components/searchForm";
 
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
@@ -109,13 +109,13 @@ const App = () => {
     }
 
     return (
-        <div>
-            <h1>Hacker News Stories</h1>
+        <div className="container">
+            <h1 className="headline-primary"> My Hacker Stories </h1>
             <SearchForm
                 searchTerm={searchTerm}
                 onSearchInput={handleSearchInput}
                 onSearchSubmit={handleSearchSubmit}/>
-            <hr/>
+
             {stories.isError && <p> Something went wrong ....</p>}
             {stories.isLoading ? (
                 <p> Loading .... </p>

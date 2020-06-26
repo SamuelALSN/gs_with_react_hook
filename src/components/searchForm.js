@@ -3,7 +3,7 @@ import InputWithLabel from "./inputWithLabel";
 
 const SearchForm = ({searchTerm,onSearchInput,onSearchSubmit}) => {
     return (
-        <form onSubmit={onSearchSubmit}>
+        <form onSubmit={onSearchSubmit} className="search-form">
             <InputWithLabel
                 id="search"
                 value={searchTerm}
@@ -15,7 +15,8 @@ const SearchForm = ({searchTerm,onSearchInput,onSearchSubmit}) => {
 
 
             {/* Disabled when we the searchterm is empty or isn't defined */}
-            <button type="submit" disabled={!searchTerm}>
+            <button type="submit" disabled={!searchTerm}
+             className="button button_large">
                 Submit
             </button>
         </form>

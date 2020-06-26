@@ -17,7 +17,9 @@ const InputWithLabel = ({id, value, onInputChange, type = 'text', children, isFo
     }, [isFocused])
     return (
         <>
-            <label htmlFor={id}>{children} </label>
+            <label htmlFor={id} className="label">
+                {children}
+            </label>
             &nbsp;
             {/* B  : The ref is passed to the input field JSX-reserved ref attribute and the element instance is assigned to the changeable current property */}
             <input
@@ -26,8 +28,9 @@ const InputWithLabel = ({id, value, onInputChange, type = 'text', children, isFo
                 id={id}
                 type={type}
                 value={value}
-                autoFocus={isFocused}
+                // autoFocus={isFocused}
                 onChange={onInputChange}
+                className="input"
             />
         </>
     )
