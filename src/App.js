@@ -62,6 +62,13 @@ const storiesReducer = (state, action) => {
     }
 }
 
+const getSumComments = stories => {
+    console.log('C')
+    return stories.data.reduce(
+        (result, value) => result + value.num_comments,
+        0
+    )
+}
 
 const App = () => {
 
@@ -111,16 +118,26 @@ const App = () => {
     }
 
     // remove a specific story given as argument (item) from the list
+    // use callback is add here for performance optimisation only
+    // it prevent to creating the function on every render
     const handleRemoveStory = useCallback(item => {
         dispatchStories({
             type: 'REMOVE_STORY',
             payload: item,
         })
-    },[])
+    }, [])
     console.log('B:APP');
+
+    // Using useMemo here is for resolving the problem below:
+    // For every time someone types in the seachForm , the computation souldn'r run again.
+    // It only runs if the dependency array here [stores] has changed.
+    const sumComments = React.useMemo(() => getSumComments(stories), [
+        stories,
+    ]);
+
     return (
         <div className={styles.container}>
-            <h1 className={styles.headlinePrimary}> My Hacker Stories </h1>
+            <h1 className={styles.headlinePrimary}> My Hacker Stories with {sumComments} comments.</h1>
             <SearchForm
                 searchTerm={searchTerm}
                 onSearchInput={handleSearchInput}

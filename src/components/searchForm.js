@@ -3,6 +3,7 @@ import  styles from '../App.module.css'
 import InputWithLabel from "./inputWithLabel";
 
 const SearchForm = ({searchTerm,onSearchInput,onSearchSubmit}) => {
+    console.log('SearchForm')
     return (
         <form onSubmit={onSearchSubmit} className={styles.searchForm}>
             <InputWithLabel

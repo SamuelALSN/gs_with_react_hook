@@ -18,3 +18,17 @@ React does this by default because preventing a re-render of child components co
 ***
 Sometimes we want to prevent re-rendering , however. For instance huge data sets displayed in a table shouldn't re-render if they are not affected by an update.
 It's more efficient to perform an equality check if something changed for the component. Therefore we can use React's memo API to make this equality check for the props
+***
+After Implementing getsumComments function and call it in our component , 
+we notice that each time text is typed in the input field of the searchForm component 
+this computation runs again with an output of a console.log(C) 
+This may be fine for a non-heavy computationike this one , but imagine this computation would take more than 500ms.
+It would give the re-rendering a delay because everything in the component has to wait for this computation.
+We can tell React to only run a function if one of its dependencies has changed
+If no dependency changed, the result of the function stays the same 
+So React's useMemo Hook help us there
+*****
+For every time someone types in the SearchForm, the computation shouldn’t run again. It only runs if the dependency array, here stories, has changed. After all, this should only be used for cost expensive computations which could lead to a delay of a (re-)rendering of a component.
+
+Now, after we went through these scenarios for useMemo, useCallback, and memo, remember that these shouldn’t necessarily be used by default. Apply these performance optimization only if you run into a performance bottlenecks. Most of the time this shouldn’t happen, because React’s rendering mechanism is pretty efficient by default. Sometimes the check for utilities like memo can be more expensive than the re-rendering itself.
+ 
