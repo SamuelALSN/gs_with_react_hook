@@ -1,20 +1,30 @@
-import React, {useCallback, useEffect, useReducer, useState} from 'react';
+import React, {useCallback, useEffect, useReducer, useRef, useState} from 'react';
 import axios from 'axios';
-import  styles from './App.module.css'
+import styles from './App.module.css'
 import List from './components/list';
 import SearchForm from "./components/searchForm";
 
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
+// we will exploiting the ref and its mutable current property for imperative state management
+// that doesn'r triffer a re-render
+
 // We are following two conventions of React's built-in hooks here
 // First the naming convention which puts the use prefix in front of every hook name
 //Second the returned values are returned ass array
 const useSemiPersistentState = (key, initialState) => {
+    const isMounted = useRef(false)
     const [value, setValue] = useState(
         localStorage.getItem(key) || initialState // defining the initial state of the searchTerm
     )
     useEffect(() => {
-        localStorage.setItem(key, value)
+        // the logic below prevent First render computation for useEffect which is used for side-effects
+        if (!isMounted.current) {
+            isMounted.current = true;
+        } else {
+            console.log('A');
+            localStorage.setItem(key, value)
+        }
     }, [value, key])
 
     return [value, setValue]
@@ -107,10 +117,10 @@ const App = () => {
             payload: item,
         })
     }
-
+    console.log('B:APP');
     return (
         <div className={styles.container}>
-            <h1 className={styles.headlinePrimary }> My Hacker Stories </h1>
+            <h1 className={styles.headlinePrimary}> My Hacker Stories </h1>
             <SearchForm
                 searchTerm={searchTerm}
                 onSearchInput={handleSearchInput}
