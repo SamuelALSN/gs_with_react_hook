@@ -12,7 +12,10 @@ const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 // We are following two conventions of React's built-in hooks here
 // First the naming convention which puts the use prefix in front of every hook name
 //Second the returned values are returned ass array
-const useSemiPersistentState = (key, initialState) => {
+const useSemiPersistentState = (
+    key: string,
+    initialState: string
+) => {
 
     //const isMounted = useRef(false) | these value will be use later to avoiding first render computation
 
@@ -143,40 +146,40 @@ const App = () => {
      *    })
      }, [])
      */
-        console.log('B:APP');
+    console.log('B:APP');
 
-        const sumComments = getSumComments(stories)
+    const sumComments = getSumComments(stories)
 
-        // ---- FOR PERFORMANCE OPTIMISATION REPLACE THE LINE BEFORE BY CODE AFTER THIS LINES
-        // Using useMemo here is for resolving the problem below: // For every time someone types in the seachForm , the computation souldn't run again. // It only runs if the dependency array here [stores] has changed.
+    // ---- FOR PERFORMANCE OPTIMISATION REPLACE THE LINE BEFORE BY CODE AFTER THIS LINES
+    // Using useMemo here is for resolving the problem below: // For every time someone types in the seachForm , the computation souldn't run again. // It only runs if the dependency array here [stores] has changed.
 
-        /**
-         * * const sumComments = React.useMemo(() => getSumComments(stories), [
-         *   stories,
-         ]);
-         */
-
-
-        return (
-            <div className={styles.container}>
-                <h1 className={styles.headlinePrimary}> My Hacker Stories with {sumComments} comments.</h1>
-                <SearchForm
-                    searchTerm={searchTerm}
-                    onSearchInput={handleSearchInput}
-                    onSearchSubmit={handleSearchSubmit}/>
-
-                {stories.isError && <p> Something went wrong ....</p>}
-                {stories.isLoading ? (
-                    <p> Loading .... </p>
-                ) : (
-                    <List
-                        list={stories.data}
-                        onRemoveItem={handleRemoveStory}
-                    />
-                )}
-            </div>
-        );
-    };
+    /**
+     * * const sumComments = React.useMemo(() => getSumComments(stories), [
+     *   stories,
+     ]);
+     */
 
 
-    export default App;
+    return (
+        <div className={styles.container}>
+            <h1 className={styles.headlinePrimary}> My Hacker Stories with {sumComments} comments.</h1>
+            <SearchForm
+                searchTerm={searchTerm}
+                onSearchInput={handleSearchInput}
+                onSearchSubmit={handleSearchSubmit}/>
+
+            {stories.isError && <p> Something went wrong ....</p>}
+            {stories.isLoading ? (
+                <p> Loading .... </p>
+            ) : (
+                <List
+                    list={stories.data}
+                    onRemoveItem={handleRemoveStory}
+                />
+            )}
+        </div>
+    );
+};
+
+
+export default App;
