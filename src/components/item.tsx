@@ -2,30 +2,22 @@ import React from 'react';
 import styles from '../App.module.css';
 import {ReactComponent as Check} from "../check.svg";
 
+type Story = {
+    objectID: string;
+    url: string;
+    title: string;
+    author: string;
+    num_comments: number;
+    points: number;
+}
 const Item = ({
-                  item, onRemoveItem
+                  item,
+                  onRemoveItem
               }: {
-                  item: {
-                      objectID: string;
-                      url: string;
-                      title: string;
-                      author: string;
-                      num_comments: number;
-                      points: number;
-                  };
-                  onRemoveItem: (item: {
-                      objectID: string;
-                      url: string;
-                      title: string;
-                      author: string;
-                      num_comments: number;
-                      points: number;
-                  }) => void
-              }) => {
+                 item: Story;
+                 onRemoveItem: (item: Story) => void
+}) => {
 
-    // const handleRemoveItem = () => {
-    //     onRemoveItem(item)
-    // }
     return (
         <div className={styles.item}>
             <span style={{width: '40%'}}><a href={item.url}>{item.title}</a></span>
