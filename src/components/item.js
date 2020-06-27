@@ -3,6 +3,7 @@ import styles from '../App.module.css';
 import {ReactComponent as Check } from "../check.svg";
 
 const Item = ({item, onRemoveItem}) => {
+
     // const handleRemoveItem = () => {
     //     onRemoveItem(item)
     // }

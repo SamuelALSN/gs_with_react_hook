@@ -13,18 +13,26 @@ const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 // First the naming convention which puts the use prefix in front of every hook name
 //Second the returned values are returned ass array
 const useSemiPersistentState = (key, initialState) => {
-    const isMounted = useRef(false)
+
+    //const isMounted = useRef(false) | these value will be use later to avoiding first render computation
+
     const [value, setValue] = useState(
         localStorage.getItem(key) || initialState // defining the initial state of the searchTerm
     )
     useEffect(() => {
         // the logic below prevent First render computation for useEffect which is used for side-effects
-        if (!isMounted.current) {
+
+        /***
+         *   if (!isMounted.current) {
             isMounted.current = true;
-        } else {
-            console.log('A');
-            localStorage.setItem(key, value)
-        }
+         } else {
+             console.log('A');
+             localStorage.setItem(key, value)
+         }
+         */
+
+        console.log('A');
+        localStorage.setItem(key, value)
     }, [value, key])
 
     return [value, setValue]
@@ -117,44 +125,58 @@ const App = () => {
         event.preventDefault();
     }
 
-    // remove a specific story given as argument (item) from the list
-    // use callback is add here for performance optimisation only
-    // it prevent to creating the function on every render
-    const handleRemoveStory = useCallback(item => {
+    const handleRemoveStory = item => {
         dispatchStories({
             type: 'REMOVE_STORY',
-            payload: item,
+            payload: item
         })
-    }, [])
-    console.log('B:APP');
-
-    // Using useMemo here is for resolving the problem below:
-    // For every time someone types in the seachForm , the computation souldn'r run again.
-    // It only runs if the dependency array here [stores] has changed.
-    const sumComments = React.useMemo(() => getSumComments(stories), [
-        stories,
-    ]);
-
-    return (
-        <div className={styles.container}>
-            <h1 className={styles.headlinePrimary}> My Hacker Stories with {sumComments} comments.</h1>
-            <SearchForm
-                searchTerm={searchTerm}
-                onSearchInput={handleSearchInput}
-                onSearchSubmit={handleSearchSubmit}/>
-
-            {stories.isError && <p> Something went wrong ....</p>}
-            {stories.isLoading ? (
-                <p> Loading .... </p>
-            ) : (
-                <List
-                    list={stories.data}
-                    onRemoveItem={handleRemoveStory}
-                />
-            )}
-        </div>
-    );
-};
+    }  // for performance optimisation replace these codes lines below by the line before
 
 
-export default App;
+    // remove a specific story given as argument (item) from the list // use callback is add here for performance optimisation only // it prevent to creating the function on every render
+
+    /**
+     * * const handleRemoveStory = useCallback(item => {
+         dispatchStories({
+     *        type: 'REMOVE_STORY',
+             payload: item,
+     *    })
+     }, [])
+     */
+        console.log('B:APP');
+
+        const sumComments = getSumComments(stories)
+
+        // ---- FOR PERFORMANCE OPTIMISATION REPLACE THE LINE BEFORE BY CODE AFTER THIS LINES
+        // Using useMemo here is for resolving the problem below: // For every time someone types in the seachForm , the computation souldn't run again. // It only runs if the dependency array here [stores] has changed.
+
+        /**
+         * * const sumComments = React.useMemo(() => getSumComments(stories), [
+         *   stories,
+         ]);
+         */
+
+
+        return (
+            <div className={styles.container}>
+                <h1 className={styles.headlinePrimary}> My Hacker Stories with {sumComments} comments.</h1>
+                <SearchForm
+                    searchTerm={searchTerm}
+                    onSearchInput={handleSearchInput}
+                    onSearchSubmit={handleSearchSubmit}/>
+
+                {stories.isError && <p> Something went wrong ....</p>}
+                {stories.isLoading ? (
+                    <p> Loading .... </p>
+                ) : (
+                    <List
+                        list={stories.data}
+                        onRemoveItem={handleRemoveStory}
+                    />
+                )}
+            </div>
+        );
+    };
+
+
+    export default App;
