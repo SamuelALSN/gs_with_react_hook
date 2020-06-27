@@ -15,7 +15,8 @@ const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 const useSemiPersistentState = (
     key: string,
     initialState: string
-) => {
+    // we tell the function to return an array [] with a string (state) and tell the functions like state updater functiioin that take a value to return nothing (void)
+): [string, (newValue: string) => void] => {
 
     //const isMounted = useRef(false) | these value will be use later to avoiding first render computation
 
