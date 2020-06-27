@@ -111,12 +111,12 @@ const App = () => {
     }
 
     // remove a specific story given as argument (item) from the list
-    const handleRemoveStory = item => {
+    const handleRemoveStory = useCallback(item => {
         dispatchStories({
             type: 'REMOVE_STORY',
             payload: item,
         })
-    }
+    },[])
     console.log('B:APP');
     return (
         <div className={styles.container}>
