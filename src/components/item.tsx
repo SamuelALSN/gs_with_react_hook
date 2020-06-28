@@ -1,16 +1,10 @@
 import React from 'react';
 import styles from '../App.module.css';
 import {ReactComponent as Check} from "../check.svg";
+import {Story} from "../stories";
 
-type Story = {
-    objectID: string;
-    url: string;
-    title: string;
-    author: string;
-    num_comments: number;
-    points: number;
-}
 
+// here defining our custom type
 type ItemProps = {
     item: Story;
     onRemoveItem: (item: Story) => void;

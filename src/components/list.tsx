@@ -1,6 +1,8 @@
 import React from 'react';
 import Item from "./item";
 
+import {Story} from '../stories'
+
 type Stories = Array<Story>;
 
 type ListProps = {
@@ -8,16 +10,18 @@ type ListProps = {
     onRemoveItem: (item: Story) => void;
 }
 
-const List = ({list, onRemoveItem}: ListProps) =>
+const List = ({list, onRemoveItem}: ListProps) => (
     // console.log('B:List') ||
-    list.map(item => (
-        <Item
-            key={item.objectID}
-            item={item}
+    <>
+        {list.map(item => (
+            <Item
+                key={item.objectID}
+                item={item}
 
-            onRemoveItem={onRemoveItem}
-        />
-    ));
-
+                onRemoveItem={onRemoveItem}
+            />
+        ))};
+    </>
+);
 export default List;
 

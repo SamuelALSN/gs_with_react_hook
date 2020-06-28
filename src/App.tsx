@@ -3,12 +3,13 @@ import axios from 'axios';
 import styles from './App.module.css'
 import List from './components/list';
 import SearchForm from "./components/searchForm";
+import {Story} from './stories'
 
 
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
 // we will exploiting the ref and its mutable current property for imperative state management
-// that doesn'r triffer a re-render
+// that doesn't trigger a re-render
 
 // We are following two conventions of React's built-in hooks here
 // First the naming convention which puts the use prefix in front of every hook name
@@ -42,42 +43,43 @@ const useSemiPersistentState = (
 
     return [value, setValue]
 }
-/* Typescript Definitions */
 
+/* Typescript type  Definitions */
 
+type Stories = Array<Story>
 type StoriesState = {
     data: Stories;
     isLoading: boolean;
     isError: boolean;
 }
 
-type StoriesAction = {
-    type: string;
-    payload: any;
+interface StoriesFetchInitAction {
+    type: 'STORIES_FETCH_INIT';
 }
 
-// interface StoriesFetchInitAction {
-//     type: 'STORIES_FETCH_INIT';
-// }
-//
-// interface StoriesFetchSucessAction {
-//     type: 'STORIES_FETCH_SUCCESS';
-// }
-//
-// interface StoriesFetchFailureAction {
-//     type: 'STORIES_FETCH_FAILURE';
-// }
-//
-// interface StoriesRemoveAction {
-//     type: 'REMOVE_STORY';
-//     payload: Story;
-// }
-//
-// type StoriesAction =
-//     | StoriesFetchInitAction
-//     | StoriesFetchSucessAction
-//     | StoriesFetchFailureAction
-//     | StoriesRemoveAction;
+interface StoriesFetchSucessAction {
+    type: 'STORIES_FETCH_SUCCESS';
+    payload: Stories;
+}
+
+interface StoriesFetchFailureAction {
+    type: 'STORIES_FETCH_FAILURE';
+}
+
+interface StoriesRemoveAction {
+    type: 'REMOVE_STORY';
+    payload: Story;
+}
+
+// We  do better by specifying each action TypeScript type as an interface, and using a union type (here StoriesAction) for the final type safety:
+// so For instance if we would dispatch an action to the reducer with an action type that's not defined , we will get a type error.
+// or if we would pass something else than a story to the action which removes a story , we will get a type error as well
+
+type StoriesAction =
+    | StoriesFetchInitAction
+    | StoriesFetchSucessAction
+    | StoriesFetchFailureAction
+    | StoriesRemoveAction;
 
 // a reducer function always receives state and action , a reducer always return a new state
 const storiesReducer = (state: StoriesState, action: StoriesAction) => {
@@ -111,7 +113,7 @@ const storiesReducer = (state: StoriesState, action: StoriesAction) => {
     }
 }
 
-const getSumComments = stories => {
+ const getSumComments = (stories:StoriesState) => {
     console.log('C')
     return stories.data.reduce(
         (result, value) => result + value.num_comments,
@@ -156,11 +158,15 @@ const App = () => {
     }, [handleFetchStories]) //D
 
 
-    const handleSearchInput = event => {
+    const handleSearchInput = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
         setSearchTerm(event.target.value)
     }
     // explicit-datafetching__2: set the url explicitly  when submit search button is clicked
-    const handleSearchSubmit = () => {
+    const handleSearchSubmit = (
+        event: React.FormEvent<HTMLFormElement>
+    ) => {
         setUrl(`${API_ENDPOINT}${searchTerm}`)
         // eslint-disable-next-line no-restricted-globals
         event.preventDefault();
