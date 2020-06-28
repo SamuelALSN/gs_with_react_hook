@@ -10,13 +10,13 @@ type Story = {
     num_comments: number;
     points: number;
 }
-const Item = ({
-                  item,
-                  onRemoveItem
-              }: {
-                 item: Story;
-                 onRemoveItem: (item: Story) => void
-}) => {
+
+type ItemProps = {
+    item: Story;
+    onRemoveItem: (item: Story) => void;
+}
+
+const Item = ({item, onRemoveItem}: ItemProps) => {
 
     return (
         <div className={styles.item}>

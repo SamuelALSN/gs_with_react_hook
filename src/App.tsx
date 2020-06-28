@@ -4,6 +4,7 @@ import styles from './App.module.css'
 import List from './components/list';
 import SearchForm from "./components/searchForm";
 
+
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
 // we will exploiting the ref and its mutable current property for imperative state management
@@ -41,9 +42,45 @@ const useSemiPersistentState = (
 
     return [value, setValue]
 }
+/* Typescript Definitions */
+
+
+type StoriesState = {
+    data: Stories;
+    isLoading: boolean;
+    isError: boolean;
+}
+
+type StoriesAction = {
+    type: string;
+    payload: any;
+}
+
+// interface StoriesFetchInitAction {
+//     type: 'STORIES_FETCH_INIT';
+// }
+//
+// interface StoriesFetchSucessAction {
+//     type: 'STORIES_FETCH_SUCCESS';
+// }
+//
+// interface StoriesFetchFailureAction {
+//     type: 'STORIES_FETCH_FAILURE';
+// }
+//
+// interface StoriesRemoveAction {
+//     type: 'REMOVE_STORY';
+//     payload: Story;
+// }
+//
+// type StoriesAction =
+//     | StoriesFetchInitAction
+//     | StoriesFetchSucessAction
+//     | StoriesFetchFailureAction
+//     | StoriesRemoveAction;
 
 // a reducer function always receives state and action , a reducer always return a new state
-const storiesReducer = (state, action) => {
+const storiesReducer = (state: StoriesState, action: StoriesAction) => {
     switch (action.type) {
         case 'STORIES_FETCH_INIT':
             return {
@@ -129,7 +166,7 @@ const App = () => {
         event.preventDefault();
     }
 
-    const handleRemoveStory = item => {
+    const handleRemoveStory = (item: Story) => {
         dispatchStories({
             type: 'REMOVE_STORY',
             payload: item
