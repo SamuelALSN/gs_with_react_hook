@@ -1,4 +1,5 @@
-### ADDING TYPESCRIPT REACT 
-
+### REACT-TESTING 
 ***
-Both the type and isFocused properties are optional. Using TypeScript, you can tell the compiler these don’t need to be passed to the component as props. The children prop has a lot of TypeScript type definitions that could be applicable to this concept, the most universal of which is React.ReactNode from the React library.
+Unit test are used for small isolate block of code such as a single function or component 
+Integration test help us figure out if thes unit test work well together
+An end-to-end test simulate a real-life scenario  such as the login flow in a web application 
